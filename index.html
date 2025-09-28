@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>English Self‑Evaluation (Year 11–12)</title>
+  <style>
+    :root{
+      --bg:#f7f7fb;--card:#ffffff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--accent-2:#1d4ed8;--ok:#10b981;--warn:#f59e0b;--bad:#ef4444;--border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji";margin:0;background:var(--bg);color:var(--ink)}
+    .wrapper{max-width:1050px;margin:2rem auto;padding:0 1rem}
+    header{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;justify-content:space-between;margin-bottom:1rem}
+    h1{font-size:clamp(1.4rem,2.5vw,2rem);margin:0}
+    .sub{color:var(--muted);font-size:.95rem}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 30px rgba(31,41,55,.06);padding:1rem;margin:1rem 0}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem}
+    .col-6{grid-column:span 6}
+    .col-12{grid-column:span 12}
+    .controls{display:flex;flex-wrap:wrap;gap:.6rem}
+    button,.btn{appearance:none;border:1px solid var(--border);background:#fff;color:var(--ink);padding:.6rem .9rem;border-radius:999px;font-weight:600;cursor:pointer}
+    .primary{background:var(--accent);border-color:var(--accent-2);color:#fff}
+    .ghost{background:transparent}
+    .danger{border-color:var(--bad);color:var(--bad)}
+    .success{border-color:var(--ok);color:var(--ok)}
+    .muted{color:var(--muted)}
+    fieldset{border:none;margin:0;padding:0}
+    legend{font-weight:800;margin-bottom:.6rem}
+    label{font-weight:600}
+    input[type="text"],input[type="date"],select,textarea{width:100%;padding:.6rem .7rem;border:1px solid var(--border);border-radius:10px;background:#fff}
+    textarea{min-height:90px}
+    .row{display:grid;grid-template-columns:1.35fr 1fr;gap:.7rem;align-items:center;padding:.55rem .6rem;border-radius:10px}
+    .row:nth-child(odd){background:#fafafa}
+    .scale{display:flex;gap:.3rem;justify-content:flex-start;align-items:center}
+    .scale input{display:none}
+    .pill{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:999px;border:1px solid var(--border);font-weight:700;cursor:pointer}
+    .pill[data-value="1"]{border-color:var(--bad)}
+    .pill[data-value="3"]{border-color:var(--warn)}
+    .pill[data-value="5"]{border-color:var(--ok)}
+    .scale input:checked + .pill{background:var(--accent);border-color:var(--accent-2);color:#fff}
+    .help{font-size:.85rem;color:var(--muted)}
+    .section-header{display:flex;align-items:center;justify-content:space-between;margin-top:.25rem}
+    .score{font-variant-numeric:tabular-nums;background:#f3f4f6;border:1px dashed var(--border);border-radius:10px;padding:.2rem .5rem;font-weight:700}
+    .footer-note{font-size:.8rem;color:var(--muted);margin-top:.6rem}
+    .hr{height:1px;background:var(--border);margin:1rem 0}
+    .hide{display:none}
+
+    @media (max-width:850px){
+      .grid{grid-template-columns:repeat(6,1fr)}
+      .col-6{grid-column:span 6}
+    }
+    @media print{
+      body{background:#fff}
+      header .controls{display:none}
+      .card{box-shadow:none}
+      .footer-actions{display:none}
+      .row:nth-child(odd){background:transparent}
+      a[href]:after{content:""}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <div>
+        <h1>English Self‑Evaluation — Year 11 & 12</h1>
+        <div class="sub">Diagnostic & progress check • Print or export to CSV/JSON • Revisit mid‑term & end‑of‑year</div>
+      </div>
+      <div class="controls">
+        <button class="primary" id="btnPrint" title="Print or Save as PDF">Print / Save as PDF</button>
+        <button id="btnCSV" title="Export current responses to CSV">Export CSV</button>
+        <button id="btnSave" class="success" title="Download a JSON snapshot">Save JSON</button>
+        <label for="loadJson" class="btn ghost" title="Load a previously saved JSON">Load JSON</label>
+        <input id="loadJson" type="file" accept="application/json" class="hide" />
+        <button id="btnReset" class="danger" title="Clear all fields">Reset</button>
+      </div>
+    </header>
+
+    <form id="evalForm" class="card" autocomplete="on">
+      <div class="grid">
+        <div class="col-6">
+          <label for="studentName">Student name</label>
+          <input id="studentName" name="studentName" type="text" placeholder="e.g., Alex Smith" />
+        </div>
+        <div class="col-3">
+          <label for="yearLevel">Year</label>
+          <select id="yearLevel" name="yearLevel">
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <label for="classGroup">Class / Group</label>
+          <input id="classGroup" name="classGroup" type="text" placeholder="e.g., 11B / Q12-Eng" />
+        </div>
+        <div class="col-6">
+          <label for="date">Date</label>
+          <input id="date" name="date" type="date" />
+        </div>
+        <div class="col-6">
+          <label for="email">Email (optional)</label>
+          <input id="email" name="email" type="text" inputmode="email" placeholder="for feedback copies" />
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <!-- SECTION: Language Skills -->
+      <fieldset class="card">
+        <div class="section-header">
+          <legend>Language Skills</legend>
+          <div class="help">1 = needs support · 3 = OK · 5 = strong • <span class="score" id="score-lang">—</span></div>
+        </div>
+        <div class="row">
+          <div>Reading comprehension (gist, detail, arguments)</div>
+          <div class="scale" data-key="lang_reading">
+            <label><input type="radio" name="lang_reading" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="lang_reading" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="lang_reading" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="lang_reading" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="lang_reading" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Vocabulary (range & precision, collocations, idioms)</div>
+          <div class="scale" data-key="lang_vocab">
+            <label><input type="radio" name="lang_vocab" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="lang_vocab" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="lang_vocab" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="lang_vocab" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="lang_vocab" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Grammar accuracy (tenses, clauses, agreement)</div>
+          <div class="scale" data-key="lang_grammar">
+            <label><input type="radio" name="lang_grammar" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="lang_grammar" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="lang_grammar" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="lang_grammar" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="lang_grammar" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Speaking fluency (confidence, interaction, coherence)</div>
+          <div class="scale" data-key="lang_speaking">
+            <label><input type="radio" name="lang_speaking" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="lang_speaking" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="lang_speaking" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="lang_speaking" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="lang_speaking" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Writing clarity & cohesion (structure, style, accuracy)</div>
+          <div class="scale" data-key="lang_writing">
+            <label><input type="radio" name="lang_writing" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="lang_writing" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="lang_writing" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="lang_writing" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="lang_writing" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- SECTION: Academic Skills -->
+      <fieldset class="card">
+        <div class="section-header">
+          <legend>Academic Skills</legend>
+          <div class="help">Reading/writing for school tasks • <span class="score" id="score-acad">—</span></div>
+        </div>
+        <div class="row">
+          <div>Essay structure (intro, body, conclusion; paragraphs)</div>
+          <div class="scale" data-key="acad_essay">
+            <label><input type="radio" name="acad_essay" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="acad_essay" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="acad_essay" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="acad_essay" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="acad_essay" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Using evidence & examples (quotations, data, references)</div>
+          <div class="scale" data-key="acad_evidence">
+            <label><input type="radio" name="acad_evidence" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="acad_evidence" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="acad_evidence" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="acad_evidence" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="acad_evidence" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Discussion & debate skills (listening, turn‑taking, rebuttal)</div>
+          <div class="scale" data-key="acad_discuss">
+            <label><input type="radio" name="acad_discuss" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="acad_discuss" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="acad_discuss" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="acad_discuss" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="acad_discuss" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Summarising & paraphrasing accurately (no copy‑paste)</div>
+          <div class="scale" data-key="acad_summary">
+            <label><input type="radio" name="acad_summary" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="acad_summary" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="acad_summary" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="acad_summary" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="acad_summary" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Research & referencing basics (sources, citation, reliability)</div>
+          <div class="scale" data-key="acad_research">
+            <label><input type="radio" name="acad_research" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="acad_research" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="acad_research" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="acad_research" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="acad_research" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- SECTION: Cultural Competence -->
+      <fieldset class="card">
+        <div class="section-header">
+          <legend>Cultural Competence</legend>
+          <div class="help">Literature & context awareness • <span class="score" id="score-cult">—</span></div>
+        </div>
+        <div class="row">
+          <div>Knowledge of English‑speaking cultures beyond UK/US</div>
+          <div class="scale" data-key="cult_beyond">
+            <label><input type="radio" name="cult_beyond" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="cult_beyond" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="cult_beyond" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="cult_beyond" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="cult_beyond" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Historical contexts (colonialism, migration, civil rights)</div>
+          <div class="scale" data-key="cult_history">
+            <label><input type="radio" name="cult_history" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="cult_history" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="cult_history" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="cult_history" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="cult_history" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Interpreting cultural references (symbols, traditions, values)</div>
+          <div class="scale" data-key="cult_refs">
+            <label><input type="radio" name="cult_refs" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="cult_refs" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="cult_refs" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="cult_refs" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="cult_refs" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Comparing cultures respectfully (self vs. other)</div>
+          <div class="scale" data-key="cult_compare">
+            <label><input type="radio" name="cult_compare" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="cult_compare" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="cult_compare" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="cult_compare" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="cult_compare" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Global Englishes (accents/varieties; listening flexibility)</div>
+          <div class="scale" data-key="cult_global">
+            <label><input type="radio" name="cult_global" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="cult_global" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="cult_global" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="cult_global" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="cult_global" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- SECTION: Study Habits / Mindset -->
+      <fieldset class="card">
+        <div class="section-header">
+          <legend>Study Habits & Mindset</legend>
+          <div class="help">How you work as a learner • <span class="score" id="score-study">—</span></div>
+        </div>
+        <div class="row">
+          <div>Consistency (homework, reading, preparation)</div>
+          <div class="scale" data-key="study_consistency">
+            <label><input type="radio" name="study_consistency" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="study_consistency" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="study_consistency" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="study_consistency" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="study_consistency" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Time management (deadlines, planning, drafting)</div>
+          <div class="scale" data-key="study_time">
+            <label><input type="radio" name="study_time" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="study_time" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="study_time" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="study_time" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="study_time" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Using feedback to improve (revisions, goal‑setting)</div>
+          <div class="scale" data-key="study_feedback">
+            <label><input type="radio" name="study_feedback" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="study_feedback" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="study_feedback" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="study_feedback" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="study_feedback" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Confidence to ask for help (teacher, peers, resources)</div>
+          <div class="scale" data-key="study_help">
+            <label><input type="radio" name="study_help" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="study_help" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="study_help" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="study_help" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="study_help" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+        <div class="row">
+          <div>Collaboration (group work, roles, respectful dialogue)</div>
+          <div class="scale" data-key="study_collab">
+            <label><input type="radio" name="study_collab" value="1"><span class="pill" data-value="1">1</span></label>
+            <label><input type="radio" name="study_collab" value="2"><span class="pill">2</span></label>
+            <label><input type="radio" name="study_collab" value="3"><span class="pill" data-value="3">3</span></label>
+            <label><input type="radio" name="study_collab" value="4"><span class="pill">4</span></label>
+            <label><input type="radio" name="study_collab" value="5"><span class="pill" data-value="5">5</span></label>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- SECTION: Reflections / Goals -->
+      <fieldset class="card">
+        <legend>Reflections & Goals</legend>
+        <div class="grid">
+          <div class="col-12">
+            <label for="challenge">My biggest challenge in English is…</label>
+            <textarea id="challenge" name="challenge" placeholder="Be specific (e.g., planning essays, speaking without notes, understanding poetry)…"></textarea>
+          </div>
+          <div class="col-12">
+            <label for="priority">My #1 improvement goal for this term is…</label>
+            <textarea id="priority" name="priority" placeholder="A clear skill you’ll practise and how you’ll measure progress"></textarea>
+          </div>
+          <div class="col-12">
+            <label for="preferences">How I learn best…</label>
+            <textarea id="preferences" name="preferences" placeholder="e.g., discussion, reading, writing, visual aids, practice tests"></textarea>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- SUMMARY CARD -->
+      <div class="card">
+        <div class="section-header">
+          <strong>Live Summary</strong>
+          <div class="help">Section averages update as you click • Overall: <span class="score" id="score-overall">—</span></div>
+        </div>
+        <div class="grid">
+          <div class="col-6">
+            <div>Language Skills avg: <span class="score" id="avg-lang">—</span></div>
+          </div>
+          <div class="col-6">
+            <div>Academic Skills avg: <span class="score" id="avg-acad">—</span></div>
+          </div>
+          <div class="col-6">
+            <div>Cultural Competence avg: <span class="score" id="avg-cult">—</span></div>
+          </div>
+          <div class="col-6">
+            <div>Study Habits avg: <span class="score" id="avg-study">—</span></div>
+          </div>
+        </div>
+        <div class="footer-note">Tip: Re‑use at mid‑term and end‑of‑year. Export CSV each time to track growth.</div>
+      </div>
+
+      <div class="footer-actions controls">
+        <button type="button" id="btnCopy" class="ghost" title="Copy a plain‑text summary to clipboard">Copy Summary</button>
+      </div>
+    </form>
+
+    <p class="footer-note">Made for in‑class use. All processing happens locally in the browser.</p>
+  </div>
+
+  <script>
+    // Utilities
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+    // Auto-fill today's date
+    (function initDate(){
+      const d = $('#date');
+      if(d && !d.value){
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth()+1).padStart(2,'0');
+        const dd = String(today.getDate()).padStart(2,'0');
+        d.value = `${yyyy}-${mm}-${dd}`;
+      }
+    })();
+
+    // Calculate section and overall averages
+    const sections = {
+      lang: ['lang_reading','lang_vocab','lang_grammar','lang_speaking','lang_writing'],
+      acad: ['acad_essay','acad_evidence','acad_discuss','acad_summary','acad_research'],
+      cult: ['cult_beyond','cult_history','cult_refs','cult_compare','cult_global'],
+      study:['study_consistency','study_time','study_feedback','study_help','study_collab']
+    };
+
+    function getValue(name){
+      const checked = $(`input[name="${name}"]:checked`);
+      return checked ? Number(checked.value) : null;
+    }
+
+    function avg(values){
+      const nums = values.filter(v => typeof v === 'number');
+      if(!nums.length) return null;
+      const a = nums.reduce((s,v)=>s+v,0)/nums.length;
+      return Math.round(a*10)/10; // 1 decimal
+    }
+
+    function updateScores(){
+      const langVals = sections.lang.map(getValue);
+      const acadVals = sections.acad.map(getValue);
+      const cultVals = sections.cult.map(getValue);
+      const studyVals= sections.study.map(getValue);
+
+      const langAvg = avg(langVals);
+      const acadAvg = avg(acadVals);
+      const cultAvg = avg(cultVals);
+      const studyAvg= avg(studyVals);
+
+      $('#avg-lang').textContent = langAvg ?? '—';
+      $('#avg-acad').textContent = acadAvg ?? '—';
+      $('#avg-cult').textContent = cultAvg ?? '—';
+      $('#avg-study').textContent = studyAvg ?? '—';
+
+      $('#score-lang').textContent = langAvg ?? '—';
+      $('#score-acad').textContent = acadAvg ?? '—';
+      $('#score-cult').textContent = cultAvg ?? '—';
+      $('#score-study').textContent= studyAvg ?? '—';
+
+      const avgs = [langAvg, acadAvg, cultAvg, studyAvg].filter(v=>v!=null);
+      $('#score-overall').textContent = avgs.length ? (Math.round((avgs.reduce((s,v)=>s+v,0)/avgs.length)*10)/10) : '—';
+    }
+
+    // Wire listeners to all radios
+    $$('.scale input[type="radio"]').forEach(r => r.addEventListener('change', updateScores));
+
+    // Print / PDF
+    $('#btnPrint').addEventListener('click', ()=> window.print());
+
+    // CSV Export
+    function toCSV(){
+      const headers = [
+        'Student name','Year','Class','Date','Email',
+        ...sections.lang,
+        ...sections.acad,
+        ...sections.cult,
+        ...sections.study,
+        'avg_lang','avg_acad','avg_cult','avg_study','avg_overall',
+        'challenge','priority','preferences'
+      ];
+
+      const values = [];
+      values.push($('#studentName').value||'');
+      values.push($('#yearLevel').value||'');
+      values.push($('#classGroup').value||'');
+      values.push($('#date').value||'');
+      values.push($('#email').value||'');
+
+      const langVals = sections.lang.map(getValue);
+      const acadVals = sections.acad.map(getValue);
+      const cultVals = sections.cult.map(getValue);
+      const studyVals= sections.study.map(getValue);
+
+      const langAvg = avg(langVals);
+      const acadAvg = avg(acadVals);
+      const cultAvg = avg(cultVals);
+      const studyAvg= avg(studyVals);
+      const overall = avg([langAvg,acadAvg,cultAvg,studyAvg]);
+
+      [...langVals, ...acadVals, ...cultVals, ...studyVals].forEach(v => values.push(v ?? ''));
+      values.push(langAvg ?? '');
+      values.push(acadAvg ?? '');
+      values.push(cultAvg ?? '');
+      values.push(studyAvg ?? '');
+      values.push(overall ?? '');
+      values.push(($('#challenge').value||'').replace(/\n/g,' '));
+      values.push(($('#priority').value||'').replace(/\n/g,' '));
+      values.push(($('#preferences').value||'').replace(/\n/g,' '));
+
+      // Build CSV
+      const esc = s => (""+s).replaceAll('"','""');
+      const headerLine = headers.map(h=>`"${esc(h)}"`).join(',');
+      const valueLine  = values.map(v=>`"${esc(v)}"`).join(',');
+      return headerLine + "\n" + valueLine + "\n";
+    }
+
+    function download(filename, mime, data){
+      const blob = new Blob([data], {type:mime});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      URL.revokeObjectURL(url);
+      a.remove();
+    }
+
+    $('#btnCSV').addEventListener('click', ()=>{
+      const name = ($('#studentName').value||'student').trim().replace(/\s+/g,'_');
+      const date = ($('#date').value||new Date().toISOString().slice(0,10));
+      download(`self_evaluation_${date}_${name}.csv`, 'text/csv;charset=utf-8', toCSV());
+    });
+
+    // Save JSON / Load JSON
+    function collectForm(){
+      const data = {
+        meta:{version:'1.0', savedAt:new Date().toISOString()},
+        studentName: $('#studentName').value||'',
+        yearLevel: $('#yearLevel').value||'',
+        classGroup: $('#classGroup').value||'',
+        date: $('#date').value||'',
+        email: $('#email').value||'',
+        scales: {},
+        reflections:{
+          challenge: $('#challenge').value||'',
+          priority: $('#priority').value||'',
+          preferences: $('#preferences').value||''
+        }
+      };
+      Object.values(sections).flat().forEach(k=>{ data.scales[k] = getValue(k); });
+      return data;
+    }
+
+    function applyForm(data){
+      if(!data) return;
+      $('#studentName').value = data.studentName||'';
+      $('#yearLevel').value = data.yearLevel||'11';
+      $('#classGroup').value = data.classGroup||'';
+      $('#date').value = data.date||'';
+      $('#email').value = data.email||'';
+      if(data.scales){
+        for(const [k,v] of Object.entries(data.scales)){
+          if(v!=null){
+            const radio = document.querySelector(`input[name="${k}"][value="${v}"]`);
+            if(radio){ radio.checked = true; }
+          }
+        }
+      }
+      if(data.reflections){
+        $('#challenge').value = data.reflections.challenge||'';
+        $('#priority').value = data.reflections.priority||'';
+        $('#preferences').value = data.reflections.preferences||'';
+      }
+      updateScores();
+    }
+
+    $('#btnSave').addEventListener('click', ()=>{
+      const data = collectForm();
+      const name = (data.studentName||'student').trim().replace(/\s+/g,'_');
+      const date = (data.date||new Date().toISOString().slice(0,10));
+      download(`self_evaluation_${date}_${name}.json`, 'application/json', JSON.stringify(data,null,2));
+    });
+
+    $('#loadJson').addEventListener('change', (e)=>{
+      const file = e.target.files?.[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try { applyForm(JSON.parse(reader.result)); }
+        catch(err){ alert('Could not load file: ' + err.message); }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // Copy plain-text summary
+    function buildSummary(){
+      const get = n=>getValue(n) ?? '-';
+      const lines = [];
+      lines.push(`# English Self‑Evaluation`);
+      lines.push(`Name: ${$('#studentName').value||'-'} | Year: ${$('#yearLevel').value||'-'} | Class: ${$('#classGroup').value||'-'} | Date: ${$('#date').value||'-'}`);
+      lines.push('');
+      lines.push(`Language: reading ${get('lang_reading')}, vocab ${get('lang_vocab')}, grammar ${get('lang_grammar')}, speaking ${get('lang_speaking')}, writing ${get('lang_writing')} (avg ${$('#avg-lang').textContent})`);
+      lines.push(`Academic: essay ${get('acad_essay')}, evidence ${get('acad_evidence')}, discuss ${get('acad_discuss')}, summary ${get('acad_summary')}, research ${get('acad_research')} (avg ${$('#avg-acad').textContent})`);
+      lines.push(`Cultural: beyond ${get('cult_beyond')}, history ${get('cult_history')}, refs ${get('cult_refs')}, compare ${get('cult_compare')}, global ${get('cult_global')} (avg ${$('#avg-cult').textContent})`);
+      lines.push(`Study: consistency ${get('study_consistency')}, time ${get('study_time')}, feedback ${get('study_feedback')}, help ${get('study_help')}, collab ${get('study_collab')} (avg ${$('#avg-study').textContent})`);
+      lines.push('');
+      lines.push(`Overall average: ${$('#score-overall').textContent}`);
+      lines.push('');
+      lines.push(`Biggest challenge: ${($('#challenge').value||'').trim()||'-'}`);
+      lines.push(`#1 goal: ${($('#priority').value||'').trim()||'-'}`);
+      lines.push(`Learner preferences: ${($('#preferences').value||'').trim()||'-'}`);
+      return lines.join('\n');
+    }
+
+    $('#btnCopy').addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(buildSummary());
+        const btn = $('#btnCopy');
+        const old = btn.textContent; btn.textContent = 'Copied!';
+        setTimeout(()=> btn.textContent = old, 1200);
+      }catch(e){ alert('Copy failed. You can still select the text manually after printing.'); }
+    });
+
+    // Reset
+    $('#btnReset').addEventListener('click', ()=>{
+      if(!confirm('Clear all fields?')) return;
+      $('#evalForm').reset();
+      updateScores();
+    });
+
+    // Initial computation
+    updateScores();
+  </script>
+</body>
+</html>
